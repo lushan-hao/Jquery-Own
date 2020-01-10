@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div>aaa</div>
+    <div>bbb</div>
+    <div>ccc</div>
+
+    <span class="header">123</span>
+    <input type="text" id="inputId">
+</body>
+<script>
+    //给页面中所有的div设置字体颜色为红色
+    //$("div").css("color","red")
+
+    (function(global){
+
+        function jQuery(selector){
+
+            //1、获取页面中所有的元素
+            //2、把这个元素放在一个特定的对象中
+            return new F(selector);
+        }
+
+        //jquery对象的构造函数
+        function F(selector){
+            //把DOM元素放到这个对象中
+            const elements = document.querySelectorAll(selector)
+            //jquery为了后续的DOM操作的方便，将这些获取到的DOM元素全部放在了对象自己身上，让自己变成了一个就像数组一样，可以使用for循环进行遍历，我们把这种对象特性称之为【伪数组】
+
+            //实现把这些所有DOM元素都添加到对象自己身上
+            for(let i = 0;i<elements.length;i++){
+                //ele：DOM元素
+                this[i] = elements[i];
+            }
+            this.length=elements.length;
+            
+        }
+
+        F.prototype = {
+            constructor:F,
+            //此时的css方法还是雏形，后续完善
+            css(name,value){
+                for(let i = 0;i<this.length;i++){
+                    let element = this[i];
+                    element.style[name]=value;
+                }
+            }
+        }
+
+        
+
+        window.$ = window.jQuery = jQuery;
+    })(window)
+
+    
+    $("div").css("color","red")
+    $(".header").css("backgroundColor","pink")
+    $("#inputId").css("backgroundColor","black")
+
+    //实现的结果：没需要需要new一个对象，但是对象的方法是共用的
+    var $1=$("div");
+    var $2=$("div");
+    console.log($1 == $2); //2个对象，false
+    console.log($1.css == $2.css); //同一个方法，true
+
+    //jquery对象不可能相同，后续，内存优化介绍如何适当地解决这种jquery对象消耗的内存
+</script>
+</html>

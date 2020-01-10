@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div>aaa</div>
+    <div>bbb</div>
+    <div>ccc</div>
+
+    <span class="header">123</span>
+    <input type="text" id="inputId">
+</body>
+<script>
+    (function(global){
+
+        function jQuery(selector){
+
+            //1、获取页面中所有的元素
+            //2、把这个元素放在一个特定的对象中
+            return new jQuery.fn.init(selector);
+        }
+        
+        //给jquery添加了一个fn属性，fn属性等价于prototype属性
+        jQuery.fn = jQuery.prototype = {
+            constructor:jQuery,
+            init:function(selector){
+                //把DOM元素放到这个对象中
+                const elements = document.querySelectorAll(selector)
+
+                for(let i = 0;i<elements.length;i++){
+                    this[i] = elements[i];
+                }
+                this.length=elements.length;
+                
+            },
+            //此时的css方法还是雏形，后续完善
+            css(name,value){
+                for(let i = 0;i<this.length;i++){
+                    let element = this[i];
+                    element.style[name]=value;
+                }
+            }
+        }
+
+        //此时创建的jquery是init构造函数的实例
+        //css方法在jquery.prototype对象中
+        //-->为了让jquery对象可以访问到css方法
+        //  -->让init的原型继承自jQuery.prototype
+        jQuery.fn.init.prototype = jQuery.fn;
+
+        jQuery.extend = function(...args){
+            //这里的extend方法参数并不确定
+            //所以建议不要指定形参，通过函数内置对象arguments来进行操作
+
+            console.log(args);
+
+            const target = args[0];
+
+            //进行对象拷贝，需要将第二个参数及其后面的所有参数中的属性遍历添加到第一个参数中
+            for(let i = 1;i<args.length;i++){
+                //每一个实参：对象
+                let arg = args[i];
+                //取出对象中的每一个属性
+                for (let key in arg) {
+                    //把该属性添加到第一个参数中
+                    target[key] = arg[key];
+                }
+            }
+
+            return target;
+        }
+
+        
+
+        window.$ = window.jQuery = jQuery;
+    })(window)
+
+    var p = {};
+    $.extend(p,{a:10},{b:20},{c:30})
+
+    //$.extend：
+    
+    // var obj={ name:"xxx",age:18}
+    // var obj3={ gender:"女"}
+    // var obj2={};
+
+    //将obj、obj3中的属性一一的遍历添加到obj2对象中
+    //$.extend(obj2,obj,obj3)
+
+
+    //作业：使用es6中的对象扩展运算符改写extend方法
+</script>
+</html>

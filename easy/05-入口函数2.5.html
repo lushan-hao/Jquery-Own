@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div>aaa</div>
+    <div>bbb</div>
+    <div>ccc</div>
+
+    <span class="header">123</span>
+    <input type="text" id="inputId">
+</body>
+<script>
+    //给页面中所有的div设置字体颜色为红色
+    //$("div").css("color","red")
+
+    (function(global){
+
+        function jQuery(selector){
+
+            //1、获取页面中所有的元素
+            //2、把这个元素放在一个特定的对象中
+
+            
+            //这样的话，随着$()操作频次的增加，会产生无数个相同的css方法，造成内存浪费
+            return new F(selector);
+        }
+
+        //jquery对象的构造函数
+        function F(selector){
+            //jquery内部封装了一个Sizzle引擎来获取DOM元素
+
+            //把DOM元素放到这个对象中
+            const elements = document.querySelectorAll(selector)
+            //为了让这些元素可以在css方法中进行访问，所以需要把这些元素放在对象上面进行传递
+            this.elements = elements;
+        }
+        F.prototype.css=function(name,value){
+            for(let i = 0;i<this.elements.length;i++){
+                let element = this.elements[i];
+                element.style[name]=value;
+            }
+        }
+
+        
+
+        window.$ = window.jQuery = jQuery;
+    })(window)
+
+    
+    $("div").css("color","red")
+    $(".header").css("backgroundColor","pink")
+    $("#inputId").css("backgroundColor","black")
+</script>
+</html>

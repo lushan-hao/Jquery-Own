@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div>aaa</div>
+    <div>bbb</div>
+    <div>ccc</div>
+</body>
+<script>
+    //给页面中所有的div设置字体颜色为红色
+    //$("div").css("color","red")
+
+    (function(global){
+
+        function jQuery(selector){
+
+            //1、获取页面中所有的元素
+            //2、把这个元素放在一个特定的对象中
+
+            const elements = document.getElementsByTagName(selector);
+            //这样的话，随着$()操作频次的增加，会产生无数个相同的css方法，造成内存浪费
+            return elements;
+        }
+
+        //解决方案，把DOM操作的方法都放在了原形中，这样看似可以正常访问，但是依然存在问题：破坏了原生的对象结构
+        //-->
+        HTMLCollection.prototype.css=()=>{
+            console.log('css方法');
+        }
+
+        window.$ = window.jQuery = jQuery;
+    })(window)
+
+    
+    $("div").css()
+</script>
+</html>
