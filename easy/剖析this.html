@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    $.each=function(obj,callback){
+
+    }
+    $.each([{age:18},{gender:"男"}],function(){
+        //this-->{age:18}
+        //this-->{gender:"男"}
+    })
+
+    $.each($("div"),function(){
+        //this-->div元素
+    })
+    //等价于：
+    $("div").each(function(){
+        //this-->div元素
+    })
+</script>
+</html>

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        div{
+            color:red;
+            font-size: 20px;
+        }
+
+        div:nth-child(1){
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div>aaa</div>
+    <div>bbb</div>
+    <div>ccc</div>
+
+    <span class="header">123</span>
+    <input type="text" id="inputId">
+</body>
+<script>
+    //1、获取样式不能使用 xxx.style.color 因为只能获取行内样式
+    //2、获取样式的正确方式：
+    //      现代浏览器：window.getComputedStyle(dom,null)
+    //      IE6-8：dom.currentStyle
+
+    (function(global){
+
+        function jQuery(selector){
+
+            //1、获取页面中所有的元素
+            //2、把这个元素放在一个特定的对象中
+            return new jQuery.fn.init(selector);
+        }
+        
+        //给jquery添加了一个fn属性，fn属性等价于prototype属性
+        jQuery.fn = jQuery.prototype = {
+            constructor:jQuery,
+            //init是一个构造函数
+            //-->构造函数内部的this指向init的实例
+            init:function(selector){
+                if(jQuery.type(selector)==="string"){
+                    //选择器
+                    //把DOM元素放到这个对象中
+                const elements = document.querySelectorAll(selector)
+                
+                //为了让css方法中可以访问到DOM元素，所以需要把elements里面的元素存放在this中
+                for(let i = 0;i<elements.length;i++){
+                    this[i] = elements[i];
+                }
+                this.length=elements.length;
+                //对象结构：{ 0:div,1:div,2:div,length:3 }
+                }else if( selector.nodeType ){
+                    //dom元素 -> { 0:div,length:1 }
+                    this[0] = selector;
+                    this.length = 1;
+                }
+
+                
+                
+            }
+        }
+
+        jQuery.fn.init.prototype = jQuery.fn;
+
+        jQuery.fn.extend = jQuery.extend = function(...args){
+            //2个extend方法区别在于：
+            //1、接收数据的对象发生了变化
+            //  -->$.extend：第一个实参
+            //  -->$.fn.extend：this
+            //2、提供数据的对象发生了变化：
+            //  -->$.extend：第二个参数及其后面的参数
+            //  -->$.fn.extend：所有的参数
+
+            //后面的拷贝过程都是一样的
+
+            let target,source=[];
+
+            source=[...args];
+            
+            //判断2种情况  
+            //$.extend({})  -->给$添加属性
+            //$.fn.extend({}) -->给$.fn添加属性
+            
+            //参数个数>1，就是给第一个实参添加属性
+            
+            //  $.extend    -->jQuery.extend 方法调用形式
+            if(args.length === 1){
+                //$.extend
+                target=this;
+                
+            }else{
+                //参数个数>1
+                target = args[0];       //目标对象就是第一个实参
+                source.splice(0,1); //源对象就是第二个及其后面的实参
+            }
+            
+            //实现拷贝部分的逻辑：
+            // source.forEach(function(item,index){
+            //     //item：就是每一个数据源对象（提供数据的对象）
+                
+            //     Object.assign(target,item)
+
+            // });
+
+            //a、Object.assign其实是支持多参数
+            //b、优化的思路：Object.assign(target,source[0],source[1],source[2]。。。)
+            Object.assign(target,...source)
+
+
+
+            return target;
+
+
+        }
+
+        //$.each([1,3,5],function(index,value){})
+        //$.each({ age:18,height:200 },function(key,value){})
+        jQuery.extend({
+            //可以遍历数组和对象
+            each(obj,callback){
+
+                //有2种情况，数组使用for循环，对象使用for...in循环
+                
+                //不仅仅可以遍历数组，也可以遍历伪数组
+                //{ length:0 }
+                //{ 0:100,length:1 }
+                //{ 0:"a",1:"b",2:"c",length:3 }
+                //在这里，由于存在数组、伪数组2种情况，只能使用一种约定俗成的方式来通过他们的特征来进行判断：length属性，并且值>=0
+                if( (length in obj) && obj.length>=0 ){
+                    for(let i =0;i<obj.length;i++){
+
+                        callback.call(obj[i],i,obj[i])
+                        //callback.apply(obj[i],[i,obj[i]])
+                        
+                        //没有必要使用bind，bind的实现相对繁琐
+                        // callback.bind(obj[i])(i,obj[i])
+                    }
+
+                }else{
+                    for(let i in obj){
+                        callback.call(obj[i],i,obj[i])
+                    }
+                }
+            },
+            
+            type(data){
+                //判断data的数据类型
+                //-->Object.prototype.toString.call(1)
+                //  -->"[object Number]"
+
+                var type=Object.prototype.toString.call(data);
+                return type
+                        .replace("[object ","")
+                        .replace("]","")
+                        .toLowerCase();
+            }
+        })
+
+        jQuery.fn.extend({
+            each(callback){
+                //this：jquery对象
+                jQuery.each(this,callback)
+
+                return this;
+            }
+        });
+        
+        //样式操作部分
+        jQuery.fn.extend({
+            //1、获取样式$("div").css("color")  只能获取到第一个div的颜色
+            //2、设置样式
+            //      $("div").css("color","red") 设置每一个div的字体颜色
+            //      $("div").css({ color:"red","backgroundColor","blue" })
+            css(...args){
+                var arg1=args[0],
+                    arg2=args[1];
+                //参数个数：1
+                if(args.length === 1){
+                    if(jQuery.type(arg1)==="string"){
+                        //a、获取样式:只能获取第一个元素的样式
+                        let firstDom = this[0];
+
+                        //错误写法
+                        // return firstDom.style[arg1]; //只能获取行内样式
+
+                        //正确的写法
+                        let domStyleObj = window.getComputedStyle(firstDom,null)
+                        return domStyleObj[arg1];
+                    }else{
+                        //b、设置多个样式  
+                        //arg1:{ color:"red",fontSize:"20px" }
+                        
+                        var _that=this;
+                        //遍历出所有要添加的样式
+                        jQuery.each(arg1,function(key,value){
+
+                            //遍历每一个DOM元素，添加指定的样式
+                            _that.css(key,value);
+                        });
+
+
+                        return _that;
+
+                    }
+                    
+                }else{
+                    //参数个数：2  设置单个样式
+                    
+                    //第一步：遍历每一个DOM
+                    //第二步：给DOM添加样式
+
+                    //this：表示一个jquery对象
+                    // this.each(function(index,dom){
+                    //     //this：表示一个DOM元素  ===   dom
+                    //     this.style[arg1] = arg2;
+                    // });
+                    // return this;
+
+                    //等价于：
+                    //$("div").css()        
+                    //this->$("div")
+                    //this: { 0:div,1:div,2:div,length:3 }
+                    return this.each(function(index,dom){
+                        //this：表示一个DOM元素  ===   dom
+                        this.style[arg1] = arg2;
+                    });
+                }
+                
+            },
+            show(){
+                //不会涉及动画
+                //功能：让所有的元素显示出来
+                
+                this.css("display","block");
+                return this;
+            },
+            hide(){
+                this.css("display","none");
+                return this;
+            },
+            toggle(){
+                //判断每一个元素，如果隐藏就显示，如果显示就隐藏
+                this.each(function(){
+                    //this:元素，并不能直接访问到css方法
+                    //-->解决方案：jquery提供了通过某种途径将dom元素转换为jquery对象
+                    // if(jQuery(this).css("display")==="none"){
+                    //     jQuery(this).show();
+                    // }else{
+                    //     jQuery(this).hide();
+                    // }
+
+                    jQuery(this).css("display")==="none"?
+                        jQuery(this).show():
+                        jQuery(this).hide()
+                })
+            }
+        })
+
+        global.$ = global.jQuery = jQuery;
+    })(window)
+
+
+    $("div").css("backgroundColor","pink");
+    $("span").css("fontSize","30px")
+
+    $("div").css({
+        border:"1px solid blue",
+        fontWeight:"bold",
+        fontSize:"50px"
+    })
+
+
+    //分析：什么功能可以链式，什么不能链式
+    //原理：如果该功能必须要有返回值，那么该功能就不能实现链式
+    //          获取样式 -->
+    //          获取属性 
+    //          获取内容 --> $("div").html()
+    //     如果该功能有没有返回值无所谓，那么该功能就可以实现链式调用
+    //          设置样式 --> 通过页面就可以验证有没有成功，所以返回值要不要无所谓
+    //          设置内容 --> $("div").html("<span>abc</span>")
+
+    // $("div")
+    //     .css("color","red")
+    //     .html("<span>abc</span>")
+    //     .append("<input/>")
+    //     .on("click",function(){
+
+    //     })
+    //     .on("keydown",function(){
+            
+    //     })
+</script>
+</html>

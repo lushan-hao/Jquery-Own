@@ -51,10 +51,6 @@
             }
         }
 
-        //此时创建的jquery是init构造函数的实例
-        //css方法在jquery.prototype对象中
-        //-->为了让jquery对象可以访问到css方法
-        //  -->让init的原型继承自jQuery.prototype
         jQuery.fn.init.prototype = jQuery.fn;
 
         jQuery.fn.extend = jQuery.extend = function(...args){
@@ -72,59 +68,85 @@
 
             source=[...args];
             
-            //判断2种情况       
+            //判断2种情况  
+            //$.extend({})  -->给$添加属性
+            //$.fn.extend({}) -->给$.fn添加属性
+            
+            //参数个数>1，就是给第一个实参添加属性
+            
             //  $.extend    -->jQuery.extend 方法调用形式
-            if(this === jQuery){
+            if(args.length === 1){
                 //$.extend
-                target=args[0];
+                target=this;
                 
-                source.splice(0,1); //删除第一个元素
             }else{
-                //$.fn.extend
-                target = this;
+                //参数个数>1
+                target = args[0];       //目标对象就是第一个实参
+                source.splice(0,1); //源对象就是第二个及其后面的实参
             }
             
             //实现拷贝部分的逻辑：
-            source.forEach(function(item,index){
-                //item：就是每一个数据源对象（提供数据的对象）
+            // source.forEach(function(item,index){
+            //     //item：就是每一个数据源对象（提供数据的对象）
                 
-                //取出item对象中的每一个属性：for...in
-                Object.keys(item).forEach((key)=>{
-                    //key就是对象中每一个属性名
-                    target[key]=item[key];
-                })
+            //     Object.assign(target,item)
 
-                //target如果本身就是一个对象字面量
-                //target={ ...target,...item };
+            // });
 
-                //考虑的完美一些：如果target本身并不是一个对象字面量，上述的方式就修改了target数据类型
-                Object.assign(target,item)
+            //a、Object.assign其实是支持多参数
+            //b、优化的思路：Object.assign(target,source[0],source[1],source[2]。。。)
+            Object.assign(target,...source)
 
-            });
+
 
             return target;
 
 
         }
 
-        
+        //$.each([1,3,5],function(index,value){})
+        //$.each({ age:18,height:200 },function(key,value){})
+        jQuery.extend({
+            //可以遍历数组和对象
+            each(obj,callback){
+                //有2种情况，数组使用for循环，对象使用for...in循环
+                
+                //不仅仅可以遍历数组，也可以遍历伪数组
+                //{ length:0 }
+                //{ 0:100,length:1 }
+                //{ 0:"a",1:"b",2:"c",length:3 }
+                //在这里，由于存在数组、伪数组2种情况，只能使用一种约定俗成的方式来通过他们的特征来进行判断：length属性，并且值>=0
+                if( (length in obj) && obj.length>=0 ){
+                    for(let i =0;i<obj.length;i++){
+
+                        callback.call(obj[i],i,obj[i])
+                        //callback.apply(obj[i],[i,obj[i]])
+                        
+                        //没有必要使用bind，bind的实现相对繁琐
+                        // callback.bind(obj[i])(i,obj[i])
+                    }
+
+                }else{
+                    for(let i in obj){
+                        callback.call(obj[i],i,obj[i])
+                    }
+                }
+            }
+        })
+
+        jQuery.fn.extend({
+            each(callback){
+                //this：jquery对象
+                jQuery.each(this,callback)
+            }
+        })
 
         global.$ = global.jQuery = jQuery;
     })(window)
 
-    var p = {};
-    $.extend(p,{a:10},{b:20},{c:30})
-
-    //第二个extend方法：其实就是为了给
-    //$.fn.extend：这是编写jquery插件的核心方法
-    //-->功能就是把这些方法添加到原型中
-    $.fn.extend({
-        dateTimePicker(){
-
-        },
-        getDate(){
-
-        }
+    $("div").each(function(index,element){
+        element.style.color="blue";
     })
+
 </script>
 </html>

@@ -85,22 +85,18 @@
             }
             
             //实现拷贝部分的逻辑：
-            source.forEach(function(item,index){
-                //item：就是每一个数据源对象（提供数据的对象）
+            // source.forEach(function(item,index){
+            //     //item：就是每一个数据源对象（提供数据的对象）
                 
-                //取出item对象中的每一个属性：for...in
-                Object.keys(item).forEach((key)=>{
-                    //key就是对象中每一个属性名
-                    target[key]=item[key];
-                })
+            //     Object.assign(target,item)
 
-                //target如果本身就是一个对象字面量
-                //target={ ...target,...item };
+            // });
 
-                //考虑的完美一些：如果target本身并不是一个对象字面量，上述的方式就修改了target数据类型
-                Object.assign(target,item)
+            //a、Object.assign其实是支持多参数
+            //b、优化的思路：Object.assign(target,source[0],source[1],source[2]。。。)
+            Object.assign(target,...source)
 
-            });
+
 
             return target;
 
@@ -115,16 +111,6 @@
     var p = {};
     $.extend(p,{a:10},{b:20},{c:30})
 
-    //第二个extend方法：其实就是为了给
-    //$.fn.extend：这是编写jquery插件的核心方法
-    //-->功能就是把这些方法添加到原型中
-    $.fn.extend({
-        dateTimePicker(){
-
-        },
-        getDate(){
-
-        }
-    })
+    console.log(p);
 </script>
 </html>
