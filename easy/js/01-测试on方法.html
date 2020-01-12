@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div>100</div>
+    <div>200</div>
+    <div>300</div>
+</body>
+<script src="./jquery.core.js"></script>
+<script src="./jquery.util.js"></script>
+<script src="./jquery.event.js"></script>
+<script>
+    $("div").on("click",function(e){
+
+        //获取点击的元素
+        console.log(e.target);
+
+        //获取元素的内容
+        console.log(e.target.innerText);
+
+        //this指向当前元素
+        console.log(this);
+
+        console.log(this.innerText);
+    })
+</script>
+</html>

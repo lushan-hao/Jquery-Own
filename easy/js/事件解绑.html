@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div>100</div>
+</body>
+<script>
+    var div=document.querySelector("div");
+    
+    //希望让事件只触发一次
+    div.addEventListener("click",function f1(){
+        //f1可以在函数体内部随意访问
+        //-->f1指向当前函数本身  === arguments.callee
+
+        alert("1");
+
+        //a、对事件解绑
+        // var _this=arguments.callee; //当前函数本身
+
+        // div.removeEventListener("click",_this);
+
+        //b、由于ES5严格模式的诞生，arguments.callee被禁用了，
+        div.removeEventListener("click",f1);
+    });
+
+
+    //外界访问不了f1变量
+    console.log(typeof f1);
+</script>
+</html>

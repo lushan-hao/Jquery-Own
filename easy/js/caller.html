@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    function f1(){
+        console.log(f1.caller); //null
+    }
+
+    function f2(){
+        f1();
+    }
+
+    // f1();
+
+    f2();
+
+    //总结：caller用来表示当前函数是在哪个函数内部调用的
+    //如果本次是在某个函数内部调用的，那么caller指向该函数
+    //如果本次不是在任何函数内部调用的，那么caller指向null
+
+    //ES5严格模式禁止使用这个东西
+
+</script>
+</html>

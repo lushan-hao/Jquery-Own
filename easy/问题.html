@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div>aaa</div>
+    <div>bbb</div>
+    <div>ccc</div>
+</body>
+<script>
+    window.onload=function(){
+      var oDiv=document.getElementsByTagName('div');
+
+       //oDiv.length：3
+      for(var i=0;i<oDiv.length;i++){
+        oDiv[i].timer=null;
+        oDiv[i].onmouseover=function(){
+          //startMove(oDiv[i],500);
+          startMove(this,500);
+          console.log(this);
+
+        }
+
+        //循环执行完毕，i的值是3了
+        oDiv[i].onmouseout=function(){
+            //错误的结果
+            //startMove(oDiv[i],100);       //i:3
+                //oDiv[0] [1] [2]  [3]并不存在
+                //就说说：oDiv不存在3这个属性 -->值：undefined
+          
+          //正确的结果
+          startMove(this,100);  //this指向绑定事件的对象
+        }
+      }
+
+       function startMove(obj,target){
+           //...
+       }
+    }
+</script>
+</html>

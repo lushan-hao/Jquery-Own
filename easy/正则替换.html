@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    //怎么用正则截取data-前面所有的字符？
+    var str = "sjhsf hj-123data-sgfas123ga";
+
+    var s1=str.replace(/data-[a-z0-9]+/,"");
+
+    console.log(s1);
+
+
+    //type方法
+    var type=Object.prototype.toString.call(1);
+    //[object Xxxx]
+    //type.replace(/\[object /,"").replace(/\]/,"").toLowerCase();
+
+    var type2=type.replace(/\[object |\]/g,"").toLowerCase();
+    console.log(type2);
+</script>
+</html>

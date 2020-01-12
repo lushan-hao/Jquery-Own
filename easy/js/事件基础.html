@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div onclick="console.log(100)">abc</div>
+    <div onclick="f1()"></div>
+
+    <div id="divHeader">abc</div>
+
+    <div id="content">100</div>
+</body>
+<script>
+    //2个匿名函数一定指向不同的内存地址
+    console.log(function(){} == function(){});//false
+    console.log(new Function() == new Function());  //false
+    console.log(new Object() == new Object());  //false
+    console.log({}=={});    //false
+
+    var div = document.querySelector("#content");
+    
+    
+    div.addEventListener("click",function(){
+        alert("1");
+    });
+    div.addEventListener("click",function(){
+        alert("2");
+    });
+    div.addEventListener("click",function(){
+        alert("3");
+    });
+
+    function f4(){
+        alert("4");
+    }
+    div.addEventListener("click",f4);
+
+    //事件的解绑：
+
+    //a、绑定失败
+    div.removeEventListener("click",function(){
+        alert("1");
+    });
+
+    //b、成功解绑
+    div.removeEventListener("click",f4);
+
+    // function f1(){
+    //     console.log(100);
+    // }
+
+    // var divHeader=document.getElementById("divHeader");
+    // divHeader.onclick=function(){
+    //     console.log('abc');
+    // }
+    //以上3种都是属于DOM0时代的事件处理方法
+    //DOM0：是指DOM标准诞生之前浏览器提供的对DOM的相关操作
+
+    //存在问题：
+    //事件只能绑定一次，如果多次绑定，会导致覆盖
+
+    //这种问题在DOM1中并没有得到解决
+    
+    //在DOM0事件到DOM2事件之间IE又出来捣乱了(IE6/7/8)
+    //      -->dom.attachEvent("onclick",function(){
+    //          //要获取事件对象：window.event
+    //          //阻止冒泡：window.event.cancelBubble=true;
+    //          //阻止默认行为：window.event.returnValue=false
+    //})
+    //      对同一个元素绑定了多个同类型事件，事件触发顺序会按照绑定顺序【倒序】触发
+    //        div.attachEvent("onclick",function(){ console.log(1)  })
+    //        div.attachEvent("onclick",function(){ console.log(2)  })
+    //        div.attachEvent("onclick",function(){ console.log(3)  })
+    //      触发顺序： 3-->2-->1
+    //    -->事件的解绑：dom.detachEvent("onclick",function(){})
+    
+    //一直到DOM2才得到解决  (从IE11开始、Edge也支持)
+    //      dom.addEventListener("click",function(e){
+                    //1、获取事件对象：e
+                    //2、阻止冒泡：e.stopPropagation()
+                    //3、阻止默认行为：e.preventDefault();
+                    //4、事件末尾，通过return false同时实现阻止冒泡和阻止默认行为
+
+    //})
+    //      对同一个元素绑定了多个同类型事件，事件触发顺序会按照绑定顺序【顺序】触发
+    //      事件的解绑：dom.removeEventListener("click",function(){})
+
+    //DOM2中提供的addEventListener这个方式支持事件流的操作
+    //事件流分为3个阶段：捕获-->目标元素阶段-->冒泡
+    //  div.addEventListener("click",回调函数,false)
+    //      其中第三个参数：false表示在冒泡阶段触发
+    //              true表示在捕获阶段触发
+</script>
+</html>

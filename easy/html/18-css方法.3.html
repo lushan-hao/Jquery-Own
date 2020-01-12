@@ -170,6 +170,7 @@
                     arg2=args[1];
                 //参数个数：1
                 if(args.length === 1){
+
                     if(jQuery.type(arg1)==="string"){
                         //a、获取样式:只能获取第一个元素的样式
                         let firstDom = this[0];
@@ -180,7 +181,9 @@
                         //正确的写法
                         let domStyleObj = window.getComputedStyle(firstDom,null)
                         return domStyleObj[arg1];
-                    }else{
+                    
+                    } else {
+                        
                         //b、设置多个样式  
                         //arg1:{ color:"red",fontSize:"20px" }
                         
@@ -197,7 +200,8 @@
 
                     }
                     
-                }else{
+                } else {
+
                     //参数个数：2  设置单个样式
                     
                     //第一步：遍历每一个DOM
