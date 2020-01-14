@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <button id="user">用户模块</button>
+    <button id="product">商品模块</button>
+</body>
+<script src="../require.js"></script>
+<script>
+    //给回调函数添加形参，接收前面对应模块的返回值，模块返回什么，形参的值就是什么
+    //形参的顺序，必须和前面调用模块的顺序保持一致
+    require(["user","product"],function(user,product){
+        //实现用户点击了按钮，出现用户模块的逻辑
+        //-->需要改造user模块，把它改成'按需加载'的加载
+
+        var btnUser=document.getElementById("user");
+        btnUser.onclick=function(){
+            //调用用户模块逻辑
+            user();
+        };
+
+        var btnProduct=document.getElementById("product");
+        btnProduct.onclick=function(){
+            //执行商品模块的逻辑
+            product.init();
+        }
+    })
+</script>
+</html>
