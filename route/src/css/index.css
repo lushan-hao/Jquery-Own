@@ -1,0 +1,25 @@
+#main{
+    display: flex;
+}
+
+/* 左侧菜单栏 */
+#main .aside{
+    width:200px;
+    height:600px;
+    background-color: pink;
+}
+
+.aside-item{
+    list-style:none;
+    text-align: center;
+    padding:30px 0;
+    border-bottom: 1px solid gray;
+    cursor: pointer;
+}
+
+/* 右侧内容区 */
+#main .content{
+    height:600px;
+    flex:1;
+    background-color: lightblue;
+}
