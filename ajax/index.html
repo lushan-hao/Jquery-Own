@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ajax</title>
+</head>
+<body>
+    <input type="button" value="点击发送ajax请求">
+    <script>
+        document.querySelector("input").onclick=function(){
+    console.log("www");
+    //利用XMLHttpRequest对象去进行交互.
+    //交互分为四步
+    //1:创建对象
+    var xhr=new XMLHttpRequest();
+    //2:打开连接
+    //提交方式，提交的地址
+    xhr.open("get","./1.json?name=xiaoming");
+    //3:发送数据
+    xhr.send(null);
+    //4:接收数据，只能通过异步的方式，就是只能通过回调函数的方式.
+    //时刻监听这服务器端状态的改变. onreadystatechange 也是xhr 的一个属性.
+    xhr.onreadystatechange=function(){
+                //服务器数据响应成功之后会调用这个函数.
+
+            //因为我跟服务器进行交互，服务器会进行处理
+            //在处理的过程当中会不断的给我一些状态.  0,1,2,3，4
+            //每个状态代表的是不同的含义
+            //状态我通过xhr 去获取到试一下.
+            //readyState 属性去获取到
+            //如果状态等于 4 代表响应完成
+            if(xhr.readyState==4){  //响应完成.
+                    //console.log("响应完成") 如果响应的是200 才代表响应成功
+                    //我们要获取到服务器端状态吗.
+                    if(xhr.status==200){
+                        //真正的处理.
+                        //响应完成的，响应是成功的.
+                        //接收服务器端返回的数据.responseText 用来接收服务器响应的数据的
+                        var data=xhr.responseText;
+                        document.querySelector("span").innerHTML=data;
+                    }
+            }
+    }
+
+};
+        // document.querySelector("input").onclick = function(){
+        //     var xhr = new XMLHttpRequest();
+        //     xhr.open("get","./api.json");
+        //     xhr.send(null);
+        //     xhr.onreadystatechange = function(){
+        //         console.log('请求发送完毕')
+        //     }
+        // }
+    </script>
+</body>
+</html>
