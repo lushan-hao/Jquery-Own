@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>必须写一个函数，这个函数可以发送请求，接收数据.</title>
+</head>
+<body>
+
+<input type="button" value="发送ajax请求">
+
+<input type="button" value="发送ajax请求" >
+<script>
+
+
+
+        //编写一个方法用来发送请求，接收数据
+        function ajax(type,url,data,success){
+              //底层是封装XMLHttpRequest
+              var xhr=new XMLHttpRequest();
+              xhr.open(type,url+"?"+data);
+              xhr.send(null)
+              //接收数据.
+              xhr.onreadystatechange=function(){
+                    if(xhr.readyState==4){
+                        if(xhr.status==200){
+                            var responseData=xhr.responseText;
+                            success(responseData);
+                        }
+                    }
+              }
+        }
+        //我在这里我去调用ajax ,传递参数，接收数据
+        //var data=;
+        //我的目的是在这里去接收数据.
+        //我们可以使用回调函数.
+        ajax("get","ajax.php","username=zhangsan&age=11&sex=nv",function(data){
+            console.log("wwww");
+            console.log(data);
+        });
+
+
+</script>
+</body>
+</html>

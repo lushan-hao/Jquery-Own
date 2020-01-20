@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>支持Get ，以及 success 函数没有传递.
+    </title>
+</head>
+<body>
+
+<script>
+    /*
+     * 封装的整个函数是一个功能函数，它现在目前它的功能是比较独立的
+     * 以后我们开发的时候我们可能根据系统的需求封装很多的功能函数
+     * 为了方便协作，我们就把这个方法拿一个对象包装起来.
+     * */
+
+    var $={
+        ajax:function(options){
+            //底层是封装XMLHttpRequest
+            //在这里要去获取到options.property
+            var xhr=new XMLHttpRequest();
+            //如果是get 提交.
+            if(options.type.toLocaleLowerCase()=="get"){
+                options.url=options.url+"?"+options.data;
+                options.data=null;
+            }
+            xhr.open(options.type,options.url);
+            //如果是post 提交
+            if(options.type.toLocaleLowerCase()=="post"){
+                xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+            }
+
+            if(options.beforeSend){
+                var flag=options.beforeSend();
+                if(!flag){
+                    return;
+                }
+            }
+
+            xhr.send(options.data);
+            //接收数据.
+            xhr.onreadystatechange=function(){
+                if(xhr.readyState==4){
+                    if(xhr.status==200){
+                        var responseData=xhr.responseText;
+                        //options.success(responseData);
+                        //逻辑判断.
+                        /* if(options.success){
+                         options.success(responseData);
+                         }*/
+                        options.success && options.success(responseData);
+                    }else{
+                         //请求出错的时候调用
+                         options.error && options.error();
+                    }
+                    //调用回调函数.
+                    options.complete && options.complete();
+                }
+            }
+        }
+    }
+    $.ajax({
+        url:"ajax.php",
+        type:"Post",
+        data:{
+            username:"zhangsan",
+            age:11,
+            sex:"nan"
+        },
+        //设置一个过滤器,这个也是一个回调函数. 请求发送之前调用.
+        beforeSend:function(){
+             console.log("请求发送之前调用");
+             //我们可以在这里去对发送到服务器的数据进行一些校验，正则校验
+             //如果验证不通过，就不发送请求了
+             //假设数据验证不通过
+             return true;
+        },
+        //这个是一个回调函数，数据响应成功的时候调用
+        success:function(info){
+            console.log(info);
+            console.log("数据响应成功调用");
+        },
+        //请求完成的时候调用. 我是想给用户一些提示.
+        complete:function(){
+             console.log("请求完成的时候去调用");
+        },
+        //请求出错的时候调用
+        error:function(){
+              console.log("请求出错的时候调用");
+        }
+    });
+</script>
+</body>
+</html>

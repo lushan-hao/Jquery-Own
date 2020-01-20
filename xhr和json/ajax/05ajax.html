@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>支持Get ，以及 success 函数没有传递.
+    </title>
+</head>
+<body>
+
+<script>
+    /*
+     * 封装的整个函数是一个功能函数，它现在目前它的功能是比较独立的
+     * 以后我们开发的时候我们可能根据系统的需求封装很多的功能函数
+     * 为了方便协作，我们就把这个方法拿一个对象包装起来.
+     * */
+
+    var $={
+        ajax:function(options){
+            //底层是封装XMLHttpRequest
+            //在这里要去获取到options.property
+            var xhr=new XMLHttpRequest();
+            //如果是get 提交.
+            if(options.type.toLocaleLowerCase()=="get"){
+                options.url=options.url+"?"+options.data;
+                options.data=null;
+            }
+            xhr.open(options.type,options.url);
+            //如果是post 提交
+            if(options.type.toLocaleLowerCase()=="post"){
+                xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+            }
+            xhr.send(options.data);
+            //接收数据.
+            xhr.onreadystatechange=function(){
+                if(xhr.readyState==4){
+                    if(xhr.status==200){
+                        var responseData=xhr.responseText;
+                        //options.success(responseData);
+                        //逻辑判断.
+                       /* if(options.success){
+                            options.success(responseData);
+                        }*/
+
+                        options.success && options.success(responseData);
+                    }
+                }
+            }
+        }
+    }
+    $.ajax({
+        url:"ajax.php",
+        type:"Post",
+        data:"username=zhangsan",
+        success:function(info){
+            console.log(info);
+        }
+    });
+</script>
+</body>
+</html>

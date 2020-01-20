@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<body>
+    <input type="button" value="查询用户">
+    <script>
+            document.querySelector("input").onclick=function(){
+                var xhr=new XMLHttpRequest();
+                xhr.open("get","./xml.php");
+                xhr.send(null);
+                xhr.onreadystatechange=function(){
+                    if(xhr.readyState==4 && xhr.status==200){
+                         //如果服务器返回的是xml 格式的数据，怎么去接收responseXML
+                         var dom=xhr.responseXML;
+
+                         var users=dom.querySelectorAll("user");
+
+                         var data=users[1].querySelector("username").innerHTML;
+
+                         console.log(data);
+                    }
+                }
+            };
+    </script>
+</body>
+</html>

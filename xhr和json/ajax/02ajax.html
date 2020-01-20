@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>支持get 方式提交以及post 方式提交..</title>
+</head>
+<body>
+
+<script>
+
+
+
+        //编写一个方法用来发送请求，接收数据
+        function ajax(type,url,data,success){
+              //底层是封装XMLHttpRequest
+              var xhr=new XMLHttpRequest();
+              //如果是get 提交.
+              if(type=="get"){
+                     url=url+"?"+data;
+                     data=null;
+              }
+              xhr.open(type,url);
+
+              //如果是post 提交
+              if(type=="post"){
+                    xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+              }
+              xhr.send(data);
+              //接收数据.
+              xhr.onreadystatechange=function(){
+                    if(xhr.readyState==4){
+                        if(xhr.status==200){
+                            var responseData=xhr.responseText;
+                            success(responseData);
+                        }
+                    }
+              }
+        }
+
+        ajax("post","ajax.php","username=zhangsan&age=11&sex=nv",function(data){
+
+        });
+
+
+</script>
+</body>
+</html>

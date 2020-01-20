@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<users>
+        <user>
+              <id>1</id>
+              <username>爱新觉罗秦</username>
+              <loginName>xiaoqin</loginName>
+              <password>11111</password>
+        </user>
+        <user>
+              <id>2</id>
+              <username>独孤九剑</username>
+              <loginName>上青云</loginName>
+              <password>11111</password>
+        </user>
+</users>
+
+[
+    {"id":11,"username":"xiaoqin","loginName":"xiaoxuanfeng","password":"111111"},
+    {"id":22,"username":"heixuanfeng","loginName":"heixuanfeng","password":"111111"}
+]
