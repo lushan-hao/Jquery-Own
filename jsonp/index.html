@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <!--
+            因为有了跨域的这样的一个概念
+    然后我们在页面上面又通过XMLHttpRequest 对象去请求跨域的数据.所以会出现数据拿不到的问题
+    jsonp
+
+    在页面除了可以使用XMLHttpRequest 对象发送请求之外，还可以使用其他的属性，或者标签.
+    -->
+    <!--通过script 标签去请求一个跨域的站点-->
+    <script src="http://static4.baihe.com/3rd-lib/jquery-1.8.3.min.js"></script>
+    <script>
+            $(function(){
+                 alert("wwww");
+            })
+    </script>
+
+<!--
+     跨域去通过XMLHttpRequest 对象去请求数据有限制，但是对script 标签是没有限制.
+
+-->
+
+
+</body>
+</html>
