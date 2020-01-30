@@ -1,0 +1,21 @@
+ <html>
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+
+ 英雄列表:
+  <ul>
+    {{each heros}}
+     <li>
+        {{$value.nickname}}
+        <img src="{{$value.img}}"> 
+        距离我{{$value.dist.calculated}}米
+     </li>
+    {{/each}}
+  </ul>
+
+
+</body>
+</html>

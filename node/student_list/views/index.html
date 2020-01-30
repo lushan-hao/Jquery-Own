@@ -1,0 +1,20 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+
+ 
+
+<!-- 同步表单上传文件的时候，表单，一定要加上enctype="multipart/form-data" -->
+  <form action="/add" method="post" enctype="multipart/form-data" >
+    网名:<input type="text" name="nickname">
+    头像:<input type="file" name="avater">
+    位置:<input type="text" name="location" >
+    <button>添加</button>
+  </form>
+
+
+</body>
+</html>
