@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+
+<body>
+    <div id="app">
+         <dom-a></dom-a>
+         <dom-b></dom-b>
+         <dom-c></dom-c>
+    </div>
+    <script src="vue.js"></script>
+    <script type="text/javascript">
+
+    var Event = new Vue();
+
+    var A = {
+        data() {
+            return {
+                a: '我是a组件中的数据'
+            }
+        },
+        template: `
+				<div>
+					<span>我是A组件的数据->{{a}}</span>
+					<input type="button"  value = '把A数据传给C' @click = 'send'/>
+				</div>
+			`,
+        methods: {
+            send() {
+                // $emit('事件名字',数据)
+
+                // this.$emit()
+                console.log(this);
+                Event.$emit('a-msg',this.a);
+
+            }
+        }
+    };
+    var B = {
+        data() {
+            return {
+                b: '我是b组件中的数据'
+            }
+        },
+        template: `
+				<div>
+					<span>我是A组件的数据->{{b}}</span>
+					<input type="button"  value = '把B数据传给C' @click = 'send'/>
+				</div>
+			`,
+        methods: {
+            send() {
+                // $emit('事件名字',数据)
+                // this.$emit()
+                console.log(this);
+                  Event.$emit('b-msg',this.b);
+            }
+        }
+    };
+
+    var C = {
+    	data(){
+    		return {
+    			a:'',
+    			b:''
+    		}
+    	},
+    	template:`
+
+	<div>
+		<h3>我是C组件</h3>
+		<span>接收A组件的数据为：{{a}}</span>
+		<br />
+		<span>接收B组件的数据为：{{b}}</span>
+	</div>
+    	`,
+    	mounted(){
+    		// 接收A中的数据
+
+    		// $on('事件名',fn(a))
+    		Event.$on('a-msg',(a)=>{
+    			this.a = a;
+    		});
+    		// 接收A中的数据
+    		Event.$on('b-msg',(b)=>{
+    			this.b = b;
+    		});
+    	},
+    }
+    new Vue({
+        el: '#app',
+        components: {
+            'dom-a': A,
+            'dom-b': B,
+            'dom-c': C
+        }
+    })
+    </script>
+</body>
+
+</html>
