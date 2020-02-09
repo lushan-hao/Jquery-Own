@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>01_my_skeleton</title>
+  </head>
+  <body>
+    <div id="app">
+                  <div style="background-color:red;height:300px;display:none;" id="default" >
+                      我是默认的骨架屏
+                  </div>
+                  <div style="background-color:red;height:300px;display:none;" id="user" >
+                      我是user的骨架屏
+                  </div>
+                  <div style="background-color:red;height:300px;display:none;" id="login" >
+                      我是login的骨架屏
+                  </div>
+                </div>
+                <script>
+                      var hash = window.location.hash;
+                      var path = window.location.pathname;
+                      if (path === '/login' || hash === '#/login') {
+                        document.getElementById('login').style.display = 'block';
+                      } else if (path === '/user' || hash === '#/user') {
+                        document.getElementById('user').style.display = 'block';
+                      } else {
+                        document.getElementById('default').style.display = 'block';
+                      }
+                </script>
+  <script type="text/javascript" src="build.js"></script></body>
+</html>
